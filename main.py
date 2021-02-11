@@ -37,7 +37,7 @@ def main():
     indexes=[]
     add_(split_word, final_word)
 
-    print("Game started!\n\nFor commands put '?' behind your words. If you would like to guess the word, put a ':' before it. Example: ':Apple'. For every wrong letter, we remove 1 point, for every wrong guess, we remove 2 points from you.")
+    print("Game started!\n\nIf you would like to guess the word, put a ':' before it. Example: ':Apple'. For every wrong letter, we remove 1 point, for every wrong guess, we remove 2 points from you.")
     input("\n\npress any key to continue...")
 
 
@@ -53,7 +53,7 @@ def main():
 
         decision = input("> ")
 
-        if guess > 0:
+        if guess > 1:
             if decision[0] == ":":
                 if decision == ":"+word.lower():
                     print("You win!")
@@ -61,17 +61,16 @@ def main():
                 else:
                     guess -=2
             elif len(decision.lower()) > 1:
-                print("Only one letter, please.")
+                pass
             elif decision not in split_word:
                 if decision in wrong:
                     pass
                 else:
                     guess -= 1
-                    print(f"Wrong! You now have {guess} guesses.")
                     wrong.append(decision)
             elif decision in split_word:
                 if decision in final_word:
-                    print("Already said")
+                    pass
                 else:
                     for i in duplicates(split_word, decision):
                         final_word.insert(i, decision)
@@ -81,7 +80,7 @@ def main():
                         print("You win!")
                         game=False
         else:
-            print("Game lost")
+            print("You lose!")
             game=False
 
 if __name__ == '__main__':
