@@ -1,87 +1,111 @@
-import random
-import os
-import platform
+try:
+    from colorama import init, Fore, Back, Style
+    import random
+    import os
+    import platform
 
-def splitlet(query):
-    return [i for i in query.lower()]
+    init(autoreset=True)
+except:
+    print(f"Install required libraries! (COLORAMA)")
 
-def add_(from_, to_):
-    for i in range(len(from_)):
-        to_.append("-")
+class Hangman:
+    def __init__(self):
+        self.guesses = 5
 
-def clear_by_machine():
-    if platform.system() == "Windows":
-        os.system('cls')
-    elif platform.system() == "Linux":
-        os.system('clear')
-    else:
-        os.system('clear')
+    def splitlet(self, query):
+        return [i for i in query.lower()]
 
-def duplicates(q1, q2):
-    return[k for k, j in enumerate(q1) if j == q2]
+    def add_(self, from_, to_):
+        for i in range(len(from_)):
+            to_.append("-")
 
-def main():
-    clear_by_machine()
-    game = True
-    guess = 5
-
-    with open("words.txt", "r") as f:
-        list_of_words = [line.strip() for line in f]
-    
-    #list_of_words = ["Father", "Mother", "Apple", "Bassist"] 
-    word = random.choice(list_of_words)
-    word_len = len(word)
-    split_word = splitlet(word)
-    final_word=[]
-    wrong=[]
-    indexes=[]
-    add_(split_word, final_word)
-
-    print("Game started!\n\nIf you would like to guess the word, put a ':' before it. Example: ':Apple'. For every wrong letter, we remove 1 point, for every wrong guess, we remove 2 points from you.")
-    input("\n\npress any key to continue...")
-
-
-
-    while game == True:
-        clear_by_machine()
-
-        #print(split_word)
-        #print(word.lower())
-        print("\n\n\t\t\tWord: " + ''.join(final_word))
-        print(f"\t\t\tIncorrect: {', '.join(wrong)}")
-        print(f"\t\t\tRemaining guesses: {guess}\n\n")
-
-        decision = input("> ")
-
-        if guess > 1:
-            if decision[0] == ":":
-                if decision == ":"+word.lower():
-                    print("You win!")
-                    game=False
-                else:
-                    guess -=2
-            elif len(decision.lower()) > 1:
-                pass
-            elif decision not in split_word:
-                if decision in wrong:
-                    pass
-                else:
-                    guess -= 1
-                    wrong.append(decision)
-            elif decision in split_word:
-                if decision in final_word:
-                    pass
-                else:
-                    for i in duplicates(split_word, decision):
-                        final_word.insert(i, decision)
-                        final_word.pop(i+1)
-
-                    if final_word == split_word:
-                        print("You win!")
-                        game=False
+    def clear_by_machine(self):
+        if platform.system() == "Windows":
+            os.system('cls')
+        elif platform.system() == "Linux":
+            os.system('clear')
         else:
-            print("You lose!")
-            game=False
+            os.system('clear')
+
+    def duplicates(self, q1, q2):
+        return[k for k, j in enumerate(q1) if j == q2]
+
+    def tutorial(self):
+        h = Hangman()
+        h.clear_by_machine()
+        print(Fore.YELLOW + "- GAME STARTED\n\n")
+        print(Fore.YELLOW + "> Guessing:\n - :word\n - Example: :unusual\n - If you win you will see this message: " + Fore.GREEN + "Congratulations! You win!\n\n")
+        print(Fore.YELLOW + "> Points:\n - You have 5 guesses by default.\n - If you get a letter wrong the game substracts " + Fore.RED + " ONE " + Fore.YELLOW + " point.\n - If you get a guess wrong the game substracts " + Fore.RED + " TWO " + Fore.YELLOW + " points.\n - If you lose you will see this message: "+ Fore.RED + "You lose! The word was: {word}\n\n")
+
+        input(Fore.YELLOW + "Press any key to continue...")
+        h.main()
+
+
+    def main(self):
+        h = Hangman()
+        h.clear_by_machine()
+        game = True
+        guess = h.guesses
+
+        with open("words.txt", "r") as f:
+            list_of_words = [line.strip() for line in f]
+
+        word = random.choice(list_of_words)
+        word_len = len(word)
+        split_word = h.splitlet(word)
+        final_word=[]
+        wrong=[]
+        indexes=[]
+        h.add_(split_word, final_word)
+
+        while game == True:
+            h.clear_by_machine()
+
+            #print(Fore.YELLOW + f"\n\n\t\tWord: " + Fore.RED + ''.join(final_word)),
+            #print(Fore.YELLOW + f"\t\tIncorrect: {', '.join(wrong)}"),
+            #print(Fore.YELLOW + f"\t\tRemaining guesses: {guess}\n\n")
+
+            texts = [f"\n\n\t\tWord: {''.join(final_word)}", f"\t\tIncorrect: {', '.join(wrong)}", f"\t\tRemaining guesses: {guess}\n\n"]
+
+            for i in texts:
+                print(Fore.YELLOW + i)
+
+            decision = input(Fore.YELLOW + "\t\t> ")
+
+            if guess > 1:
+                if decision[0] == ":":
+                    if decision.lower() == ":"+word.lower():
+                        h.clear_by_machine()
+                        print(Fore.GREEN + "Congratulations! You win!")
+                        game=False
+                    else:
+                        guess -= 2
+                elif len(decision.lower()) > 1:
+                    pass
+                elif decision.lower() not in split_word:
+                    if decision.lower() in wrong:
+                        pass
+                    else:
+                        guess -= 1
+                        wrong.append(decision.lower())
+                elif decision.lower() in split_word:
+                    if decision.lower() in final_word:
+                        pass
+                    else:
+                        for i in h.duplicates(split_word, decision.lower()):
+                            final_word.insert(i, decision.lower())
+                            final_word.pop(i+1)
+                            texts.append("ok")
+
+                        if final_word == split_word:
+                            h.clear_by_machine()
+                            print(Fore.GREEN + "Congratulations! You win!")
+                            game=False
+            else:
+                h.clear_by_machine()
+                print(Fore.RED + f"You lose! The word was: {word}")
+                game=False
 
 if __name__ == '__main__':
-    main()
+    h = Hangman()
+    h.tutorial()
