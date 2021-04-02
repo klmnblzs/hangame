@@ -1,10 +1,10 @@
+import random
+import os
+import sys
+import platform
 
 try:
     from colorama import init, Fore, Back, Style
-    import random
-    import os
-    import sys
-    import platform
 
     init(autoreset=True)
 except:
