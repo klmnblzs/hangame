@@ -1,7 +1,9 @@
+
 try:
     from colorama import init, Fore, Back, Style
     import random
     import os
+    import sys
     import platform
 
     init(autoreset=True)
@@ -40,6 +42,14 @@ class Hangman:
         input(Fore.YELLOW + "Press any key to continue...")
         h.main()
 
+    def confirmation(self):
+        h = Hangman()
+        decision = input("Continue? (Y/n): ")
+
+        if decision.lower() in ["y", ""]:
+            h.tutorial()
+        elif decision.lower() == "n":
+            sys.exit()
 
     def main(self):
         h = Hangman()
@@ -61,10 +71,6 @@ class Hangman:
         while game == True:
             h.clear_by_machine()
 
-            #print(Fore.YELLOW + f"\n\n\t\tWord: " + Fore.RED + ''.join(final_word)),
-            #print(Fore.YELLOW + f"\t\tIncorrect: {', '.join(wrong)}"),
-            #print(Fore.YELLOW + f"\t\tRemaining guesses: {guess}\n\n")
-
             texts = [f"\n\n\t\tWord: {''.join(final_word)}", f"\t\tIncorrect: {', '.join(wrong)}", f"\t\tRemaining guesses: {guess}\n\n"]
 
             for i in texts:
@@ -78,6 +84,7 @@ class Hangman:
                         h.clear_by_machine()
                         print(Fore.GREEN + "Congratulations! You win!")
                         game=False
+                        h.confirmation()
                     else:
                         guess -= 2
                 elif len(decision.lower()) > 1:
@@ -101,10 +108,12 @@ class Hangman:
                             h.clear_by_machine()
                             print(Fore.GREEN + "Congratulations! You win!")
                             game=False
+                            h.confirmation()
             else:
                 h.clear_by_machine()
                 print(Fore.RED + f"You lose! The word was: {word}")
                 game=False
+                h.confirmation()
 
 if __name__ == '__main__':
     h = Hangman()
