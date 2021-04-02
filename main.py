@@ -5,7 +5,6 @@ import platform
 
 try:
     from colorama import init, Fore, Back, Style
-
     init(autoreset=True)
 except:
     print(f"Install required libraries! (COLORAMA)")
@@ -43,33 +42,31 @@ class Hangman:
         h.main()
 
     def confirmation(self):
-        h = Hangman()
         decision = input("Continue? (Y/n): ")
 
         if decision.lower() in ["y", ""]:
-            h.tutorial()
+            self.tutorial()
         elif decision.lower() == "n":
             sys.exit()
 
     def main(self):
-        h = Hangman()
-        h.clear_by_machine()
+        self.clear_by_machine()
         game = True
-        guess = h.guesses
+        guess = self.guesses
 
         with open("words.txt", "r") as f:
             list_of_words = [line.strip() for line in f]
 
         word = random.choice(list_of_words)
         word_len = len(word)
-        split_word = h.splitlet(word)
+        split_word = self.splitlet(word)
         final_word=[]
         wrong=[]
         indexes=[]
-        h.add_(split_word, final_word)
+        self.add_(split_word, final_word)
 
         while game == True:
-            h.clear_by_machine()
+            self.clear_by_machine()
 
             texts = [f"\n\n\t\tWord: {''.join(final_word)}", f"\t\tIncorrect: {', '.join(wrong)}", f"\t\tRemaining guesses: {guess}\n\n"]
 
@@ -81,10 +78,10 @@ class Hangman:
             if guess > 1:
                 if decision[0] == ":":
                     if decision.lower() == ":"+word.lower():
-                        h.clear_by_machine()
+                        self.clear_by_machine()
                         print(Fore.GREEN + "Congratulations! You win!")
                         game=False
-                        h.confirmation()
+                        self.confirmation()
                     else:
                         guess -= 2
                 elif len(decision.lower()) > 1:
@@ -99,21 +96,21 @@ class Hangman:
                     if decision.lower() in final_word:
                         pass
                     else:
-                        for i in h.duplicates(split_word, decision.lower()):
+                        for i in self.duplicates(split_word, decision.lower()):
                             final_word.insert(i, decision.lower())
                             final_word.pop(i+1)
                             texts.append("ok")
 
                         if final_word == split_word:
-                            h.clear_by_machine()
+                            self.clear_by_machine()
                             print(Fore.GREEN + "Congratulations! You win!")
                             game=False
-                            h.confirmation()
+                            self.confirmation()
             else:
-                h.clear_by_machine()
+                self.clear_by_machine()
                 print(Fore.RED + f"You lose! The word was: {word}")
                 game=False
-                h.confirmation()
+                self.confirmation()
 
 if __name__ == '__main__':
     h = Hangman()
