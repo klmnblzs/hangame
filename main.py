@@ -2,6 +2,7 @@ import random
 import os
 import sys
 import platform
+import time
 
 try:
     from colorama import init, Fore, Back, Style
@@ -17,6 +18,8 @@ except:
 class Hangman:
     def __init__(self):
         self.guesses = 5
+
+    # * Utils
 
     def splitlet(self, query):
         return [i for i in query.lower()]
@@ -36,6 +39,14 @@ class Hangman:
     def duplicates(self, q1, q2):
         return[k for k, j in enumerate(q1) if j == q2]
 
+    def typewriter(self, text):
+        for char in text:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.05)
+
+    # * Additions
+
     def tutorial(self):
         h = Hangman()
         h.clear_by_machine()
@@ -43,7 +54,8 @@ class Hangman:
         print(Fore.YELLOW + "> Guessing:\n - :word\n - Example: :unusual\n - If you win you will see this message: " + Fore.GREEN + "Congratulations! You win!\n\n")
         print(Fore.YELLOW + "> Points:\n - You have 5 guesses by default.\n - If you get a letter wrong the game substracts " + Fore.RED + " ONE " + Fore.YELLOW + " point.\n - If you get a guess wrong the game substracts " + Fore.RED + " TWO " + Fore.YELLOW + " points.\n - If you lose you will see this message: "+ Fore.RED + "You lose! The word was: {word}\n\n")
 
-        input(Fore.YELLOW + "Press any key to continue...")
+        self.typewriter("Press any key to continue...")
+        input()
         h.main()
 
     def confirmation(self):
@@ -54,6 +66,8 @@ class Hangman:
         elif decision.lower() == "n":
             sys.exit()
 
+    # * Game
+
     def main(self):
         self.clear_by_machine()
         game = True
@@ -63,11 +77,9 @@ class Hangman:
             list_of_words = [line.strip() for line in f]
 
         word = random.choice(list_of_words)
-        word_len = len(word)
         split_word = self.splitlet(word)
         final_word=[]
         wrong=[]
-        indexes=[]
         self.hide_characters(split_word, final_word)
 
         while game == True:
