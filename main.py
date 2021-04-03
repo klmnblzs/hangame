@@ -7,7 +7,12 @@ try:
     from colorama import init, Fore, Back, Style
     init(autoreset=True)
 except:
-    print(f"Install required libraries! (COLORAMA)")
+    try:
+        os.system("pip install colorama")
+        print("Colorama (python libary) has been installed. Restart the script!")
+        sys.exit()
+    except:
+        print(f"We tried installing `colorama` but something went wrong. We suggest you do it manually or the application won't work. If you don't know anything about installing python libraries, look up PIP (Python Package Installer)")
 
 class Hangman:
     def __init__(self):
@@ -16,7 +21,7 @@ class Hangman:
     def splitlet(self, query):
         return [i for i in query.lower()]
 
-    def add_(self, from_, to_):
+    def hide_characters(self, from_, to_):
         for i in range(len(from_)):
             to_.append("-")
 
@@ -63,7 +68,7 @@ class Hangman:
         final_word=[]
         wrong=[]
         indexes=[]
-        self.add_(split_word, final_word)
+        self.hide_characters(split_word, final_word)
 
         while game == True:
             self.clear_by_machine()
