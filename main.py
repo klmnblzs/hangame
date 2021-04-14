@@ -45,6 +45,7 @@ class Hangman:
             sys.stdout.flush()
             time.sleep(0.05)
 
+
     # * Additions
 
     def tutorial(self):
@@ -54,7 +55,7 @@ class Hangman:
         print(Fore.YELLOW + "> Guessing:\n - :word\n - Example: :unusual\n - If you win you will see this message: " + Fore.GREEN + "Congratulations! You win!\n\n")
         print(Fore.YELLOW + "> Points:\n - You have 5 guesses by default.\n - If you get a letter wrong the game substracts " + Fore.RED + " ONE " + Fore.YELLOW + " point.\n - If you get a guess wrong the game substracts " + Fore.RED + " TWO " + Fore.YELLOW + " points.\n - If you lose you will see this message: "+ Fore.RED + "You lose! The word was: {word}\n\n")
 
-        self.typewriter("Press any key to continue...")
+        self.typewriter("Press `Enter` to continue...")
         input()
         h.main()
 
@@ -72,7 +73,6 @@ class Hangman:
         self.clear_by_machine()
         game = True
         guess = self.guesses
-
         with open("words.txt", "r") as f:
             list_of_words = [line.strip() for line in f]
 
@@ -116,7 +116,6 @@ class Hangman:
                         for i in self.duplicates(split_word, decision.lower()):
                             final_word.insert(i, decision.lower())
                             final_word.pop(i+1)
-                            texts.append("ok")
 
                         if final_word == split_word:
                             self.clear_by_machine()
